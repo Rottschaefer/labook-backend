@@ -66,7 +66,7 @@ export class PostBusiness {
     public createPost = async (input: CreatePostInputDTO) => {
 
 
-        const { creator_id, content, token } = input
+        const {content, token } = input
 
         const payload = this.tokenManager.getPayload(token)
 
@@ -80,7 +80,7 @@ export class PostBusiness {
 
         const newPost = new Post(
             id,
-            creator_id,
+            payload.id,
             content,
             0,
             0,
@@ -232,7 +232,7 @@ export class PostBusiness {
             }
 
 
-            await this.postDatabase.likePost(likesNumber, dislikesNumber, id, payload.id, like)
+            await this.postDatabase.dislikePost(likesNumber, dislikesNumber, id, payload.id, like)
 
 
         }

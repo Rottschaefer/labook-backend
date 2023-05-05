@@ -8,6 +8,8 @@ CREATE TABLE users (
     created_at TEXT DEFAULT(DATETIME()) NOT NULL
 );
 
+-- DROP TABLE users;
+
 INSERT INTO users (id, name, email, password, role)
 VALUES("u001","EDU","rott@gmail","12345","admin");
 
@@ -24,7 +26,7 @@ CREATE TABLE posts (
     Foreign Key (creator_id) REFERENCES users(id)
   );
 
---   DROP TABLE posts;
+-- DROP TABLE posts;
 
   INSERT INTO posts (id, creator_id, content, likes, dislikes)
   VALUES ("p001", "u001", "Bananinha", 10, 2);
@@ -39,6 +41,9 @@ CREATE TABLE posts (
     Foreign Key (post_id) REFERENCES posts(id)
   );
 
+-- DROP TABLE likes_dislikes;
+
+
 SELECT * FROM likes_dislikes;
 
-DROP TABLE likes_dislikes;
+-- DROP TABLE likes_dislikes;

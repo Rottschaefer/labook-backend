@@ -47,7 +47,7 @@ export class PostController {
         try {
 
             const input = CreatePostSchema.parse({
-                creator_id: req.body.creatorId,
+                // creator_id: req.body.creatorId,
                 content: req.body.content,
                 token: req.headers.authorization
             })
@@ -75,7 +75,7 @@ export class PostController {
         try {
 
             const input = EditPostInputSchema.parse({
-                id: req.body.id,
+                id: req.params.id,
                 token: req.headers.authorization,
                 content: req.body.content
             })
@@ -105,13 +105,13 @@ export class PostController {
         try {
 
             const input = DeletePostInputSchema.parse({
-                id: req.body.id,
+                id: req.params.id,
                 token: req.headers.authorization
             })
 
             await this.postBusiness.deletePost(input)
 
-            res.status(200).send({message: "Post deletado"})
+            res.status(200).send()
 
         }
         catch (error) {
@@ -141,7 +141,7 @@ export class PostController {
 
             await this.postBusiness.likePost(input)
 
-            res.status(200).send({message: "like dado no post", id: input.id})
+            res.status(200).send()
 
         }
         catch (error) {

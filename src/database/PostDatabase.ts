@@ -34,32 +34,36 @@ export class PostDatabase extends BaseDatabase {
 
     public likePost = async (likesNumber: number, dislikesNumber: number, post_id: string, user_id: string, like: boolean) => {
 
-        if (like) {
             await BaseDatabase.connection(PostDatabase.TABLE_POSTS).update({ likes: likesNumber, dislikes: dislikesNumber }).where({ id: post_id })
 
             await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES).update({ like: 1 }).where({ post_id, user_id })
-        }
-
         
-        if (!like) {
+    }
+
+    public dislikePost = async (likesNumber: number, dislikesNumber: number, post_id: string, user_id: string, like: boolean) => {
+   
             await BaseDatabase.connection(PostDatabase.TABLE_POSTS).update({ likes: likesNumber, dislikes: dislikesNumber }).where({ id: post_id })
 
             await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES).update({ like: 0 }).where({ post_id, user_id })
-        }
 
-
-        // await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES).update({like: alreadyLiked}).where({post_id, user_id})
     }
 
     public verifyLike = async (post_id: string, user_id: string) => {
 
-        const [likes_dislikes] = await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES).where({ post_id, user_id })
+        let [likes_dislikes] = await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES).where({ post_id, user_id })
+
+        let isLiked
 
         if(!likes_dislikes){
-        await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES).insert({ user_id, post_id, like: 2}).where({ post_id, user_id })
-        }
+        await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES).insert({ user_id, post_id, like: 2}).where({ post_id, user_id });
 
-        const isLiked = likes_dislikes.like
+        [likes_dislikes] = await BaseDatabase.connection(PostDatabase.TABLE_LIKES_DISLIKES).where({ post_id, user_id })
+
+        isLiked = likes_dislikes.like
+        }
+        else if(likes_dislikes){
+            isLiked = likes_dislikes.like
+        }
 
         return isLiked
     }

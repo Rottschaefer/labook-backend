@@ -50,9 +50,15 @@ export class UserBusiness {
 
         const hashPassword = await this.hashManager.hash(password)
 
-        console.log(hashPassword)
-
         const id = this.idGenerator.generate()
+
+        const usersDB = await this.userDatabase.getUsers()
+
+        const user = usersDB.find((userDB)=>userDB.email === email)
+
+        if(user){
+            throw new BadRequestError("Já existe um usuário com esse email")
+        }
 
         const newUser = new User(
             id,

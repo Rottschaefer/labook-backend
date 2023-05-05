@@ -36,13 +36,13 @@ export class UserController {
         try {
             
             const input = SignUpSchema.parse({
-                // id: req.body.id,
                 name: req.body.name,
                 email: req.body.email,
                 password: req.body.password
             })
 
             const output: SignUpOutputUserDTO = await this.userBusiness.signUp(input)
+
 
             res.status(201).send(output)
 
@@ -72,7 +72,6 @@ export class UserController {
             const token = await this.userBusiness.logIn(input)
 
             const output: LogInOutputDTO = {
-                message: "Login realizado com sucesso",
                 token: token
             } 
 
