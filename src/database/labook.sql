@@ -24,9 +24,21 @@ CREATE TABLE posts (
     Foreign Key (creator_id) REFERENCES users(id)
   );
 
-  DROP TABLE posts;
+--   DROP TABLE posts;
 
   INSERT INTO posts (id, creator_id, content, likes, dislikes)
   VALUES ("p001", "u001", "Bananinha", 10, 2);
 
   SELECT * FROM posts;
+
+  CREATE TABLE likes_dislikes (
+    user_id TEXT NOT NULL,
+    post_id TEXT NOT NULL,
+    like INTEGER NOT NULL,
+    Foreign Key (user_id) REFERENCES users(id),
+    Foreign Key (post_id) REFERENCES posts(id)
+  );
+
+SELECT * FROM likes_dislikes;
+
+DROP TABLE likes_dislikes;

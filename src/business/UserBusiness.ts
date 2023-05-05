@@ -1,7 +1,9 @@
 import { UserDatabase } from "../database/UserDatabase";
+import { LogInInputDTO } from "../dtos/Users/LogInDTO";
 import { SignUpInputUserDTO, SignUpOutputUserDTO } from "../dtos/Users/SignUpDTO";
 import { BadRequestError } from "../errors/BadRequestError";
 import { USER_ROLES, User, UserDB } from "../models/User";
+import { HashManager } from "../services/HashManager";
 import { IdGenerator } from "../services/IdGenerator";
 import { TokenManager, TokenPayload } from "../services/TokenManager";
 
@@ -9,7 +11,8 @@ export class UserBusiness {
     constructor(
         private userDatabase: UserDatabase,
         private idGenerator: IdGenerator,
-        private tokenManager: TokenManager
+        private tokenManager: TokenManager,
+        private hashManager: HashManager
     ) { }
 
     public getUsers = async () => {
@@ -43,7 +46,11 @@ export class UserBusiness {
     }
 
     public signUp = async (input: SignUpInputUserDTO): Promise<SignUpOutputUserDTO> => {
-        const {name, email, password } = input
+        const { name, email, password } = input
+
+        const hashPassword = await this.hashManager.hash(password)
+
+        console.log(hashPassword)
 
         const id = this.idGenerator.generate()
 
@@ -51,8 +58,8 @@ export class UserBusiness {
             id,
             name,
             email,
-            password,
-            USER_ROLES.NORMAL,
+            hashPassword,
+            USER_ROLES.NORMAL, 
             new Date().toISOString()
         )
 
@@ -75,7 +82,46 @@ export class UserBusiness {
 
         await this.userDatabase.signUp(newUserDB)
 
-        return ({token})
+        return ({ token })
+
+    }
+
+    public logIn = async (input: LogInInputDTO): Promise<string> => {
+
+        const { email, password } = input
+
+        const userDB: UserDB = await this.userDatabase.findUSerByEmail(email)
+
+        if (!userDB) {
+            throw new BadRequestError("Email não cadastrado")
+        }
+
+        const isPasswordCorrect = await this.hashManager.compare(password, userDB.password)
+
+        if (!isPasswordCorrect) {
+            throw new BadRequestError("Senha incorreta")
+        }
+
+
+        const user = new User(
+            userDB.id,
+            userDB.name,
+            userDB.email,
+            userDB.password,
+            userDB.role,
+            userDB.created_at
+        )
+
+
+        const tokenPayload: TokenPayload = {
+            id: userDB.id,
+            name: userDB.name,
+            role: userDB.role
+        }
+
+        const token = this.tokenManager.createToken(tokenPayload)
+
+        return token
 
     }
 }

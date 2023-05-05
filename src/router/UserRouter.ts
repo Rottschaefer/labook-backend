@@ -4,6 +4,7 @@ import { UserBusiness } from "../business/UserBusiness"
 import { UserDatabase } from "../database/UserDatabase"
 import { IdGenerator } from "../services/IdGenerator"
 import { TokenManager } from "../services/TokenManager"
+import { HashManager } from "../services/HashManager"
 
 export const userRouter = express.Router()
 
@@ -11,9 +12,11 @@ const userController = new UserController(
     new UserBusiness(
         new UserDatabase,
         new IdGenerator,
-        new TokenManager
+        new TokenManager,
+        new HashManager
     )
 )
 
 userRouter.get("/", userController.getUsers)
 userRouter.post("/", userController.signUp)
+userRouter.get("/login", userController.logIn)
