@@ -42,7 +42,7 @@ Bem-vindo à nossa API! Com ela, você pode criar usuários, fazer login, criar,
 
 ##  🎯Objetivo do Projeto
 
-Este é um projeto de Back-end | Front-end | Full-Stack , desenvolvido no bootcamp da Labenu, cujo o principal objetivo é estudar e compreender a arquitetura em camadas e programação orientada a objetos(POO). Junto a isso se tem a utilização de bibliotecas de geração de UUID's e hashes no processo de autenticação e autorização. Também foi visada a maior experiência com NodeJS, TypeScript, Express, SQL, SQLite, Knex, Postman e roteamento.
+Este é um projeto de Back-end, desenvolvido no bootcamp da Labenu, cujo o principal objetivo é estudar e compreender a arquitetura em camadas e programação orientada a objetos(POO). Junto a isso se tem a utilização de bibliotecas de geração de UUID's e hashes no processo de autenticação e autorização. Também foi visada a maior experiência com NodeJS, TypeScript, Express, SQL, SQLite, Knex, Postman e roteamento.
 
 
 ## ☑️Requisitos de Funcionalidade
